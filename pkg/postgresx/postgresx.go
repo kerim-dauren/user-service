@@ -3,72 +3,63 @@ package postgresx
 import (
 	"context"
 	"fmt"
-	"github.com/jackc/pgx/v5"
 	"log"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 const (
-	_defaultMaxPoolSize  = 10
-	_defaultConnAttempts = 10
-	_defaultConnTimeout  = time.Second
+	defaultMaxPoolSize  = 10
+	defaultConnAttempts = 10
+	defaultConnTimeout  = time.Second
 )
 
-// Postgres -.
 type Postgres struct {
 	maxPoolSize  int
 	connAttempts int
 	connTimeout  time.Duration
-
-	//Builder squirrel.StatementBuilderType
-	Pool *pgxpool.Pool
+	Pool         *pgxpool.Pool
 }
 
 func New(url string, opts ...Option) (*Postgres, error) {
 	pg := &Postgres{
-		maxPoolSize:  _defaultMaxPoolSize,
-		connAttempts: _defaultConnAttempts,
-		connTimeout:  _defaultConnTimeout,
+		maxPoolSize:  defaultMaxPoolSize,
+		connAttempts: defaultConnAttempts,
+		connTimeout:  defaultConnTimeout,
 	}
 
-	// Custom options
 	for _, opt := range opts {
 		opt(pg)
 	}
 
-	//pg.Builder = squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)
-
-	poolConfig, err := pgxpool.ParseConfig(url)
+	cfg, err := pgxpool.ParseConfig(url)
 	if err != nil {
-		return nil, fmt.Errorf("postgres - NewPostgres - pgxpool.ParseConfig: %w", err)
+		return nil, fmt.Errorf("failed to parse pgxpool config: %w", err)
 	}
 
-	poolConfig.MaxConns = int32(pg.maxPoolSize)
-	poolConfig.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeCacheDescribe
+	cfg.MaxConns = int32(pg.maxPoolSize)
+	cfg.ConnConfig.DefaultQueryExecMode = pgx.QueryExecModeCacheDescribe
 
+	// Attempt to create a connection pool with retries.
 	for pg.connAttempts > 0 {
-		pg.Pool, err = pgxpool.NewWithConfig(context.Background(), poolConfig)
+		pg.Pool, err = pgxpool.NewWithConfig(context.Background(), cfg)
 		if err == nil {
 			break
 		}
-
-		log.Printf("Postgres is trying to connect, attempts left: %d", pg.connAttempts)
-
+		log.Printf("Postgres connection attempt failed, attempts left: %d", pg.connAttempts)
 		time.Sleep(pg.connTimeout)
-
 		pg.connAttempts--
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("postgres - NewPostgres - connAttempts == 0: %w", err)
+		return nil, fmt.Errorf("failed to connect after retries: %w", err)
 	}
 
 	return pg, nil
 }
 
-// Close -.
 func (p *Postgres) Close() {
 	if p.Pool != nil {
 		p.Pool.Close()
