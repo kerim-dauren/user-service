@@ -8,6 +8,10 @@ compose-run:
 	docker compose down
 	docker compose up --build --remove-orphans -d
 
+.PHONY: gotest
+gotest:
+	go test ./... -v -cover
+
 .PHONY: migration-up migration-down migration-create
 
 CURRENT_DIR := $(shell pwd)

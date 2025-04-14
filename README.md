@@ -98,7 +98,7 @@ API documentation is generated using Swagger. To generate and view the documenta
 
 2. **Access the Swagger UI:**
 
-   Open your browser and navigate to `http://localhost:8080/swagger/index.html`.
+   Open your browser and navigate to `http://localhost:8080/swagger-ui/index.html`.
 
 ## Makefile Targets
 
@@ -107,8 +107,8 @@ API documentation is generated using Swagger. To generate and view the documenta
 - `make migration-create`: Create a new migration script.
 - `make project-build`: Build the Go project.
 - `make compose-run`: Run the service using Docker Compose.
-- `make compose-show-logs`: Show logs for the `user_service` container.
 - `make godoc`: Generate Swagger API documentation.
+- `make gotest`: Run all unit tests in the project with verbose output and coverage report.
 
 ## Directory Structure
 
