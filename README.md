@@ -113,20 +113,22 @@ API documentation is generated using Swagger. To generate and view the documenta
 
 ## Directory Structure
 
+```
 .
-├── cmd # Main application entrypoint
+├── cmd                  # Main application entrypoint
 ├── internal
-│ ├── api # HTTP API handlers and routing
-│ ├── configs # Configuration loading and management
-│ ├── domain # Domain models and interfaces
-│ ├── services # Business logic and service implementations
-│ └── storages # Data storage implementations (PostgreSQL)
-├── pkg # Reusable packages
+│   ├── api              # HTTP API handlers and routing
+│   ├── configs          # Configuration loading and management
+│   ├── domain           # Domain models and interfaces
+│   ├── services         # Business logic and service implementations
+│   └── storages         # Data storage implementations (PostgreSQL)
+├── pkg                  # Reusable packages
 ├── db
-│ └── migration # Database migration scripts
-├── .env # Environment configuration
-├── Dockerfile # Dockerfile for building the service image
-├── docker-compose.yml # Docker Compose configuration
-├── go.mod # Go module definition
-├── go.sum # Go module checksums
-└── Makefile # Task automation
+│   └── migration        # Database migration scripts
+├── .env                 # Environment configuration
+├── Dockerfile           # Dockerfile for building the service image
+├── docker-compose.yml   # Docker Compose configuration
+├── go.mod               # Go module definition
+├── go.sum               # Go module checksums
+└── Makefile             # Task automation
+```
