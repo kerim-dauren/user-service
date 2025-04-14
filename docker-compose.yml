@@ -7,6 +7,7 @@ services:
     container_name: user_service
     ports:
       - "8080:8080"
+      - "8081:8081"
     environment:
       - DB_URL=${DB_URL:-postgres://postgres:postgres@db:5432/mydb?sslmode=disable}
     depends_on:

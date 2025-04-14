@@ -108,7 +108,8 @@ API documentation is generated using Swagger. To generate and view the documenta
 - `make project-build`: Build the Go project.
 - `make compose-run`: Run the service using Docker Compose.
 - `make godoc`: Generate Swagger API documentation.
-- `make gotest`: Run all unit tests in the project with verbose output and coverage report.
+- `make go-test`: Run all unit tests in the project with verbose output and coverage report.
+- `make go-proto-gen`: Generate Go code from .proto files
 
 ## Directory Structure
 

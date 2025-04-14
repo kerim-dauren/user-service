@@ -29,7 +29,7 @@ RUN chmod +x /app/main /app/docker-entrypoint.sh && \
 # Switch to non-root user
 USER appuser
 
-EXPOSE 8080
+EXPOSE 8080 8081
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD curl --silent --fail http://localhost:8080/health || exit 1

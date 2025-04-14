@@ -8,9 +8,22 @@ compose-run:
 	docker compose down
 	docker compose up --build --remove-orphans -d
 
-.PHONY: gotest
-gotest:
+.PHONY: go-test
+go-test:
 	go test ./... -v -cover
+
+.PHONY: go-proto-gen
+go-proto-gen:
+	protoc \
+	--go_out=. \
+	--go_opt=paths=source_relative \
+	--go-grpc_out=. \
+	--go-grpc_opt=paths=source_relative \
+	gen/proto/user.proto
+
+.PHONY: generate-mocks
+generate-mocks:
+	mockgen -source=internal/domain/user.go -destination=internal/domain/mock_user.go -package=domain
 
 .PHONY: migration-up migration-down migration-create
 
