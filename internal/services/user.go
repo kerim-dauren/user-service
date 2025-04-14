@@ -46,6 +46,9 @@ func NewUserService(
 func (s *userService) CreateUser(ctx context.Context, user *domain.User) (id int64, err error) {
 	defer s.observeDuration("CreateUser", &err)()
 	hashedPass, err := s.passwordHasher.Hash(user.Password)
+	if err != nil {
+		return 0, fmt.Errorf("hash error: %w", err)
+	}
 	user.Password = hashedPass
 	return s.userStorage.CreateUser(ctx, user)
 }

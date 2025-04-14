@@ -68,7 +68,7 @@ func NewHttpRouter(deps *RouterDeps) *gin.Engine {
 	{
 		apiV1.Use(
 			middlewares.PrometheusMiddleware(requestDuration),
-			//middlewares.TraceID(), //TODO tracing requests
+			//middlewares.TraceID(), //TODO for tracing requests
 		)
 
 		userHandler := v1.NewUserHandler(deps.UserService)
